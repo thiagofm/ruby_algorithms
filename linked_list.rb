@@ -43,6 +43,17 @@ class List
     @head = Node.new(data, head)
   end
 
+  def find_value(value)
+    node = @head
+
+    while(node)
+      return true if node.data == value
+      node = node.next
+    end
+
+    false
+  end
+
   def insert_sorted(data)
     return insert(data) if list_empty?
 
@@ -111,6 +122,16 @@ describe List do
 
       res.should include 'bla'
       res.should include 'ble'
+    end
+  end
+
+  context '#find_value' do
+    it "finds if a value exists" do
+      @list.insert('foo')
+      @list.insert('bar')
+
+      @list.find_value('foo').should be true
+      @list.find_value('xpto').should be false
     end
   end
 
