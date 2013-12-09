@@ -65,6 +65,24 @@ class List
     node.next = Node.new(data, node.next)
   end
 
+  def remove_value(value)
+    current_node = @head
+    previous_node = nil
+    node_is_removed = false
+
+    return @head = nil if value == @head.data
+
+    while(current_node.has_next? && !node_is_removed)
+      previous_node = current_node
+      current_node = current_node.next
+
+      if current_node.data == value
+        previous_node.next = current_node.next
+        node_is_removed = true
+      end
+    end
+  end
+
   private
   def list_empty?
     @head == nil
@@ -142,6 +160,35 @@ describe List do
       @list.insert_sorted(7)
       @list.insert_sorted(3)
       @list.to_a.should == [1,2,3,7]
+    end
+  end
+
+  context '#remove_value' do
+    it "removes value" do
+      @list.insert(1)
+      @list.insert(2)
+      @list.insert(3)
+      @list.insert(4)
+      @list.remove_value(2)
+
+      @list.to_a.should == [4,3,1]
+    end
+
+    it "removes value in the end of the list" do
+      @list.insert(1)
+      @list.insert(2)
+      @list.insert(3)
+      @list.insert(4)
+      @list.remove_value(1)
+
+      @list.to_a.should == [4,3,2]
+    end
+
+    it "removes the value when the list has only one value" do
+      @list = List.new
+      @list.insert(1)
+      @list.remove_value(1)
+      @list.to_a.should == []
     end
   end
 end
